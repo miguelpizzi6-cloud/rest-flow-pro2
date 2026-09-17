@@ -1,0 +1,1 @@
+ALTER TABLE public.funcionarios ADD COLUMN IF NOT EXISTS horarios_semana JSONB NOT NULL DEFAULT '{}'::jsonb;
