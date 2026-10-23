@@ -154,11 +154,15 @@ function FuncionarioHome() {
             <h3 className="font-semibold">Próxima semana</h3>
             <Badge variant="outline">Liberada a partir de quinta</Badge>
           </div>
-          {s.folgaProxima ? (
-            <div className="rounded-lg bg-muted p-4">
-              <p className="text-xs text-muted-foreground">Sua folga</p>
-              <p className="text-lg font-semibold">{diaLongo(s.folgaProxima)}</p>
-              <p className="text-sm text-muted-foreground">{formatBR(s.folgaProxima)}</p>
+           {s.folgasProximas && s.folgasProximas.length > 0 ? (
+            <div className="flex flex-col gap-2">
+              {s.folgasProximas.map((folga: string, index: number) => (
+                <div key={index} className="rounded-lg bg-muted p-4">
+                  <p className="text-xs text-muted-foreground">Sua folga</p>
+                  <p className="text-lg font-semibold">{diaLongo(folga)}</p>
+                  <p className="text-sm text-muted-foreground">{formatBR(folga)}</p>
+                </div>
+              ))}
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
