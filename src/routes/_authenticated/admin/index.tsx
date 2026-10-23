@@ -693,15 +693,15 @@ function FuncionarioRow({ f }: { f: any }) {
               <Input
                 type="password"
                 inputMode="numeric"
-                maxLength={4}
-                placeholder="4 dígitos"
+                maxLength={6}
+                placeholder="6 dígitos"
                 value={novaSenha}
-                onChange={(e) => setNovaSenha(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                onChange={(e) => setNovaSenha(e.target.value.replace(/\D/g, "").slice(0, 6))}
               />
               <DialogFooter>
                 <Button
                   onClick={() => resetMut.mutate()}
-                  disabled={!/^\d{4}$/.test(novaSenha) || resetMut.isPending}
+                  disabled={!/^\d{6}$/.test(novaSenha) || resetMut.isPending}
                 >
                   Salvar
                 </Button>
