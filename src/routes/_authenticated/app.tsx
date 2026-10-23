@@ -195,7 +195,7 @@ function FuncionarioHome() {
                 </p>
 
               </div>
-              <NovaTrocaDialog folgaAtual={s.folgaAtual} folgaProxima={s.folgaProxima} />
+              <NovaTrocaDialog folgasAtuais={s.folgasAtuais} folgasProximas={s.folgasProximas} />
             </div>
           </Card>
 
