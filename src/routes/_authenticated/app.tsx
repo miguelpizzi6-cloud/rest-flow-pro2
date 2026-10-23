@@ -132,17 +132,21 @@ function FuncionarioHome() {
           <div className="text-xs text-muted-foreground mb-3">
             Horário: <span className="font-mono">{formatHorario(s.funcionario)}</span>
           </div>
-          {s.folgaAtual ? (
-            <div className="rounded-lg bg-primary-soft p-4">
-              <p className="text-xs text-muted-foreground">Sua folga</p>
-              <p className="text-lg font-semibold">{diaLongo(s.folgaAtual)}</p>
-              <p className="text-sm text-muted-foreground">{formatBR(s.folgaAtual)}</p>
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Escala ainda não publicada para esta semana.
-            </p>
-          )}
+                          {s.folgasAtuais && s.folgasAtuais.length > 0 ? (
+                  <div className="flex flex-col gap-2">
+                    {s.folgasAtuais.map((folga: string, index: number) => (
+                      <div key={index} className="rounded-lg bg-primary-soft p-4">
+                        <p className="text-xs text-muted-foreground">Sua folga</p>
+                        <p className="text-lg font-semibold">{diaLongo(folga)}</p>
+                        <p className="text-sm text-muted-foreground">{formatBR(folga)}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Escala ainda não publicada para esta semana.
+                  </p>
+                )}
         </Card>
 
         <Card className="p-5">
