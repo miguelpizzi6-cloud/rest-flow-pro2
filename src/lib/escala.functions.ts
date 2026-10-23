@@ -99,8 +99,12 @@ export const editarFolga = createServerFn({ method: "POST" })
       .object({
         funcionario_id: z.string().uuid(),
         semana: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-        nova_folga: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+        // Novo: de 1 a 2 dias de folga na semana
+        folgas: z.array(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).min(1).max(2).optional(),
+        // Compatibilidade: formato antigo (uma única folga)
+        nova_folga: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
       })
+      .refine((v) => v.folgas || v.nova_folga, { message: "Informe ao menos um dia de folga." })
       .parse(i),
   )
   .handler(async ({ data, context }) => {
@@ -108,9 +112,14 @@ export const editarFolga = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const sunday = weekStart(data.semana);
     const week = weekDays(sunday);
-    if (!week.includes(data.nova_folga)) throw new Error("Data fora da semana.");
-    if (new Date(data.nova_folga + "T00:00:00Z").getUTCDay() === 6)
-      throw new Error("Sábado nunca pode ser folga.");
+    const folgas = Array.from(new Set(data.folgas ?? [data.nova_folga as string]));
+    if (folgas.length < 1 || folgas.length > 2)
+      throw new Error("Selecione de 1 a 2 dias de folga, sem repetir o mesmo dia.");
+    for (const f of folgas) {
+      if (!week.includes(f)) throw new Error("Data fora da semana.");
+      if (new Date(f + "T00:00:00Z").getUTCDay() === 6)
+        throw new Error("Sábado nunca pode ser folga.");
+    }
 
     // Buscar contexto ±7 dias para validar 7 dias
     const from = addDays(sunday, -7);
@@ -126,7 +135,7 @@ export const editarFolga = createServerFn({ method: "POST" })
       funcionario_id: c.funcionario_id,
       data: c.data,
       status: week.includes(c.data)
-        ? c.data === data.nova_folga
+        ? folgas.includes(c.data)
           ? "folga"
           : "trabalho"
         : c.status,
@@ -137,7 +146,7 @@ export const editarFolga = createServerFn({ method: "POST" })
         projected.push({
           funcionario_id: data.funcionario_id,
           data: d,
-          status: d === data.nova_folga ? "folga" : "trabalho",
+          status: folgas.includes(d) ? "folga" : "trabalho",
         });
       }
     }
@@ -148,7 +157,7 @@ export const editarFolga = createServerFn({ method: "POST" })
       );
     }
 
-    // Aplicar: setar folga em nova_folga, trabalho nos demais da semana
+    // Aplicar: folga nos dias escolhidos (1 ou 2), trabalho nos demais da semana
     for (const d of week) {
       await supabaseAdmin
         .from("escalas")
@@ -156,7 +165,7 @@ export const editarFolga = createServerFn({ method: "POST" })
           {
             funcionario_id: data.funcionario_id,
             data: d,
-            status: d === data.nova_folga ? "folga" : "trabalho",
+            status: folgas.includes(d) ? "folga" : "trabalho",
           },
           { onConflict: "funcionario_id,data" },
         );
