@@ -20,7 +20,7 @@ export const STATUS = ["Ativo", "Férias", "Suspensão"] as const;
 
 const senhaSchema = z
   .string()
-  .regex(/^\d{4}$/, "Senha deve ter exatamente 4 dígitos numéricos");
+  .regex(/^\d{6}$/, "Senha deve ter exatamente 6 dígitos numéricos");
 
 // ---------- Listar funcionários ----------
 export const listarFuncionarios = createServerFn({ method: "GET" })
