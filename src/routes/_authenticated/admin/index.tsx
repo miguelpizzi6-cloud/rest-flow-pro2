@@ -883,10 +883,10 @@ function NovoFuncionarioDialog() {
               <Input
                 type="password"
                 inputMode="numeric"
-                maxLength={4}
+                maxLength={6}
                 value={form.senha}
                 onChange={(e) =>
-                  setForm({ ...form, senha: e.target.value.replace(/\D/g, "").slice(0, 4) })
+                  setForm({ ...form, senha: e.target.value.replace(/\D/g, "").slice(0, 6) })
                 }
               />
             </div>
