@@ -343,7 +343,11 @@ function NovaTrocaDialog({
   const criar = useServerFn(criarTroca);
   const qc = useQueryClient();
 
-  const options = [folgaAtual, folgaProxima].filter(Boolean) as string[];
+    // Junta todas as folgas da semana atual + a próxima
+  const options = [
+    ...(Array.isArray(s.folgasAtuais) ? s.folgasAtuais : []), 
+    folgaProxima
+  ].filter(Boolean) as string[];
 
   const mut = useMutation({
     mutationFn: async () => criar({ data: { data_origem: origem, data_desejada: desejada } }),
@@ -463,7 +467,7 @@ function AlterarSenhaCard() {
           <Input
             type="password"
             inputMode="numeric"
-            maxLength={4}
+            maxLength={6}
             value={nova}
             onChange={(e) => setNova(e.target.value.replace(/\D/g, "").slice(0, 6))}
           />
