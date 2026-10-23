@@ -975,7 +975,7 @@ function NovoFuncionarioDialog() {
         <DialogFooter>
           <Button
             onClick={() => mut.mutate()}
-            disabled={mut.isPending || !form.nome || !form.matricula || !/^\d{4}$/.test(form.senha)}
+            disabled={mut.isPending || !form.nome || !form.matricula || !/^\d{6}$/.test(form.senha)}
           >
             {mut.isPending ? "Salvando..." : "Criar"}
           </Button>
