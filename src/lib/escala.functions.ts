@@ -234,9 +234,10 @@ export const getMinhaSemana = createServerFn({ method: "GET" })
 
     // Dias consecutivos até próxima folga
     let diasConsec = 0;
-    const proximaFolga = (cells ?? [])
+        const proximaFolga = (cells ?? [])
       .filter((c) => c.status === "folga" && c.data >= hoje)
       .sort((a, b) => a.data.localeCompare(b.data))[0];
+    // Essa lógica já estava certa para achar a data mais próxima!
     if (proximaFolga) {
       let cursor = hoje;
       while (cursor < proximaFolga.data) {
@@ -248,8 +249,9 @@ export const getMinhaSemana = createServerFn({ method: "GET" })
 
     return {
       funcionario: func,
-      folgasAtuais: folgasAtuais, // <-- MUDOU AQUI (envia a lista)
+      folgasAtuais: folgasAtuais,
       folgaProxima: podeMostrarProxima ? (folgaProxima?.data ?? null) : null,
+      proximaFolgaGeral: proximaFolga?.data ?? null,
       contador_domingos: func.contador_domingos ?? 0,
       dias_consecutivos: diasConsec,
     };
