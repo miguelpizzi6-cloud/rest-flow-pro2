@@ -243,10 +243,7 @@ function EscalaPanel() {
           <Button variant="outline" onClick={() => setSemana(addDays(semana, 7))}>
             Próx. semana →
           </Button>
-          <Button onClick={() => gerarMut.mutate()} disabled={gerarMut.isPending}>
-            <Wand2 className="h-4 w-4 mr-2" />
-            {gerarMut.isPending ? "Gerando..." : "Gerar escala"}
-          </Button>
+          
           <Button variant="outline" onClick={exportarCSV}>
             <Download className="h-4 w-4 mr-2" />CSV
           </Button>
