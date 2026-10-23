@@ -326,7 +326,7 @@ function EscalaPanel() {
                 <div className="bg-primary/10 border-y px-4 py-2 text-sm font-bold text-primary uppercase tracking-wide sticky top-[52px] z-[5]">
                   {grupo.setor} <span className="text-xs text-muted-foreground font-normal">({grupo.funcs.length})</span>
                 </div>
-                                {grupo.funcs.map((f: any, idx: number) => {
+                {grupo.funcs.map((f: any, idx: number) => {
                   // 1. Encontra TODAS as folgas do funcionário na semana
                   const folgasDoFuncionario = week.filter((d) => cellsMap.get(`${f.id}|${d}`) === "folga");
                   
@@ -349,20 +349,25 @@ function EscalaPanel() {
                             onClick={() => {
                               if (isSat) return toast.error("Sábado nunca pode ser folga.");
                               
-                              // 3. Se já é folga, não faz nada
                               if (isFolga) {
                                 toast.info("Este dia já é uma folga.");
                                 return; 
                               }
                               
-                              // 4. Se já tem 2 folgas, impede uma terceira
                               if (folgasDoFuncionario.length >= 2) {
                                 toast.error("O funcionário já possui o limite de 2 folgas nesta semana.");
                                 return;
                               }
 
-                              // 5. Envia a nova folga para o back-end
-                              editMut.mutate({ funcionario_id: f.id, nova_folga: d });
+                              // AGORA ELE ENVIA A LISTA (folgas) EM VEZ DE UM ITEM SÓ (nova_folga)
+                              const novasFolgas = folgasDoFuncionario.length === 0 
+                                ? [d] 
+                                : [folgasDoFuncionario[0], d];
+
+                              editMut.mutate({ 
+                                funcionario_id: f.id, 
+                                folgas: novasFolgas // O servidor agora vai entender!
+                              } as any);
                             }}
                             className={`border-l h-14 flex items-center justify-center text-sm transition-all ${
                               isFolga
