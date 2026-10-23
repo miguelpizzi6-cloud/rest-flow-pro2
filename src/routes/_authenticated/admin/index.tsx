@@ -346,27 +346,28 @@ function EscalaPanel() {
                           <button
                             type="button"
                             key={d}
-                            onClick={() => {
+                                                        onClick={() => {
                               if (isSat) return toast.error("Sábado nunca pode ser folga.");
                               
-                              if (isFolga) {
-                                toast.info("Este dia já é uma folga.");
-                                return; 
-                              }
+                              let novasFolgas;
                               
-                              if (folgasDoFuncionario.length >= 2) {
-                                toast.error("O funcionário já possui o limite de 2 folgas nesta semana.");
-                                return;
+                              if (isFolga) {
+                                // Se clicar em um dia que JÁ é folga, ele REMOVE a folga
+                                novasFolgas = folgasDoFuncionario.filter(folga => folga !== d);
+                                toast.success("Folga removida.");
+                              } else {
+                                // Se clicar em um dia de Trabalho, ele ADICIONA (se tiver menos de 2)
+                                if (folgasDoFuncionario.length >= 2) {
+                                  toast.error("O funcionário já possui o limite de 2 folgas nesta semana.");
+                                  return;
+                                }
+                                novasFolgas = [...folgasDoFuncionario, d];
+                                toast.success("Folga adicionada.");
                               }
-
-                              // AGORA ELE ENVIA A LISTA (folgas) EM VEZ DE UM ITEM SÓ (nova_folga)
-                              const novasFolgas = folgasDoFuncionario.length === 0 
-                                ? [d] 
-                                : [folgasDoFuncionario[0], d];
 
                               editMut.mutate({ 
                                 funcionario_id: f.id, 
-                                folgas: novasFolgas // O servidor agora vai entender!
+                                folgas: novasFolgas 
                               } as any);
                             }}
                             className={`border-l h-14 flex items-center justify-center text-sm transition-all ${
