@@ -455,13 +455,13 @@ function AlterarSenhaCard() {
       <h3 className="font-semibold mb-3">Alterar minha senha</h3>
       <div className="space-y-3">
         <div>
-          <Label>Nova senha (4 dígitos numéricos)</Label>
+          <Label>Nova senha (6 dígitos numéricos)</Label>
           <Input
             type="password"
             inputMode="numeric"
             maxLength={4}
             value={nova}
-            onChange={(e) => setNova(e.target.value.replace(/\D/g, "").slice(0, 4))}
+            onChange={(e) => setNova(e.target.value.replace(/\D/g, "").slice(0, 6))}
           />
         </div>
         <Button onClick={() => mut.mutate()} disabled={!/^\d{4}$/.test(nova) || mut.isPending}>
