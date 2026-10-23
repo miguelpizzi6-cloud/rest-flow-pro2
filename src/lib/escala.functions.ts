@@ -216,9 +216,14 @@ export const getMinhaSemana = createServerFn({ method: "GET" })
       .gte("data", inicioAnterior)
       .lte("data", fimProxima);
 
-    const folgaAtual = (cells ?? []).find(
-      (c) => c.status === "folga" && c.data >= semanaAtual && c.data <= addDays(semanaAtual, 6),
-    );
+        // Pega TODAS as folgas da semana atual
+    const folgasAtuais = (cells ?? [])
+      .filter(
+        (c) => c.status === "folga" && c.data >= semanaAtual && c.data <= addDays(semanaAtual, 6),
+      )
+      .map((c) => c.data)
+      .sort();
+
     const folgaProxima = (cells ?? []).find(
       (c) => c.status === "folga" && c.data >= proximaSemana && c.data <= fimProxima,
     );
