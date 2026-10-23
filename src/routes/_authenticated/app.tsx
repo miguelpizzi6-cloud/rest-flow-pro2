@@ -102,8 +102,8 @@ function FuncionarioHome() {
         <StatCard
           icon={<Calendar className="h-5 w-5" />}
           label="Sua próxima folga"
-          value={s.folgaAtual ? formatBR(s.folgaAtual) : "Não definida"}
-          hint={s.folgaAtual ? diaLongo(s.folgaAtual) : "Aguardando escala"}
+          value={s.proximaFolgaGeral ? formatBR(s.proximaFolgaGeral) : "Não definida"}
+          hint={s.proximaFolgaGeral ? diaLongo(s.proximaFolgaGeral) : "Aguardando escala"}
         />
         <StatCard
           icon={<Sun className="h-5 w-5" />}
