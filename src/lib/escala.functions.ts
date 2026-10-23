@@ -248,7 +248,7 @@ export const getMinhaSemana = createServerFn({ method: "GET" })
 
     return {
       funcionario: func,
-      folgaAtual: folgaAtual?.data ?? null,
+      folgasAtuais: folgasAtuais, // <-- MUDOU AQUI (envia a lista)
       folgaProxima: podeMostrarProxima ? (folgaProxima?.data ?? null) : null,
       contador_domingos: func.contador_domingos ?? 0,
       dias_consecutivos: diasConsec,
