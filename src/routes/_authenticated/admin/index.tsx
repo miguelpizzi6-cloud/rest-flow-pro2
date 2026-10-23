@@ -879,7 +879,7 @@ function NovoFuncionarioDialog() {
               />
             </div>
             <div>
-              <Label>Senha (4 dígitos)</Label>
+              <Label>Senha (6 dígitos)</Label>
               <Input
                 type="password"
                 inputMode="numeric"
